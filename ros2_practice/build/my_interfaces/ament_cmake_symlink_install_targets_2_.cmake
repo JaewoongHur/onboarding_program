@@ -1,0 +1,1 @@
+ament_cmake_symlink_install_targets("TARGET_FILES" "/home/jw/ros2_practice/build/my_interfaces/rosidl_generator_py/my_interfaces/my_interfaces_s__rosidl_typesupport_c.so" "TARGETS" "my_interfaces_s__rosidl_typesupport_c" "DESTINATION" "lib/python3.12/site-packages/my_interfaces")

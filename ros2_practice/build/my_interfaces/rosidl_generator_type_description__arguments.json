@@ -1,0 +1,11 @@
+{
+  "package_name": "my_interfaces",
+  "output_dir": "/home/jw/ros2_practice/build/my_interfaces/rosidl_generator_type_description/my_interfaces",
+  "idl_tuples": [
+    "/home/jw/ros2_practice/build/my_interfaces/rosidl_adapter/my_interfaces:srv/SendText.idl"
+  ],
+  "include_paths": [
+    "service_msgs:/opt/ros/jazzy/share/service_msgs",
+    "builtin_interfaces:/opt/ros/jazzy/share/builtin_interfaces"
+  ]
+}

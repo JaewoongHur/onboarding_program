@@ -1,0 +1,15 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from my_interfaces/srv/SendText.srv
+// generated code does not contain a copyright notice
+
+
+module my_interfaces {
+  module srv {
+    struct SendText_Request {
+      string text;
+    };
+    struct SendText_Response {
+      string response;
+    };
+  };
+};

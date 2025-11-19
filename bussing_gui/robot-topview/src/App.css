@@ -124,7 +124,7 @@
   background: #4bff63;
   border: 3px solid #ffffff;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  transition: transform 1.5s ease;
+  /* transition: transform 1.5s ease; */
 
   z-index: 9999;
 }

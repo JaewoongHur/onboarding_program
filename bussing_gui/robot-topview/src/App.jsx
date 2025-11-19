@@ -9,33 +9,121 @@ const TABLE_POSITIONS = {
   4: { x: 1350, y: 910 },
 };
 
+const WAYPOINTS = {
+  T0: { x: 380,  y: 480 },
+  T1: { x: 450,  y: 520 },
+  T2: { x: 1050, y: 520 },
+  T3: { x: 450,  y: 910 },
+  T4: { x: 1050, y: 910 },
+};
+
+const PATH_MAP = {
+  0: {
+    0:[],
+    1:["T1", 1],
+    2:["T1", 1, "T2", 2],
+    3:["T0", "T3", 3],
+    4:["T1", 1, "T2", "T4", 4]
+  },
+
+  1: {
+    0:["T1", 0],
+    1:[],
+    2:["T2", 2],
+    3:["T1", "T3", 3],
+    4:["T2", "T4", 4]
+  },
+
+  2: {
+    0:["T2", 1, "T1", 0],
+    1:["T2", 1],
+    2:[],
+    3:["T2", "T4", 3],
+    4:["T2", "T4", 4]
+  },
+
+  3:{
+    0:["T3", "T0", 0],
+    1:["T3", "T1", 1],
+    2:["T4", "T2", 2],
+    3:[],
+    4:["T4", 4]
+  },
+
+  4:{
+    0:["T4", 3, "T3", "T0", 0],
+    1:["T4", "T2", 1],
+    2:["T4", "T2", 2],
+    3:["T4", 3],
+    4:[]
+  }
+}
+
+const lerp = (a, b, t) => a + (b - a) * t;
+
+const animateTo = (start, end, duration, onUpdate, onDone) => {
+  const startTime = performance.now();
+
+  const step = (now) => {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+
+    const x = lerp(start.x, end.x, t);
+    const y = lerp(start.y, end.y, t);
+
+    onUpdate({ x, y });
+
+    if (t < 1) requestAnimationFrame(step);
+    else onDone && onDone();
+  };
+
+  requestAnimationFrame(step);
+};
+
 function App() {
   const [robotPos, setRobotPos] = useState(TABLE_POSITIONS[0]);
   const [target, setTarget] = useState(0);
   const [status, setStatus] = useState("Idle");
   const [lastCmd, setLastCmd] = useState("-");
 
-
-const go = (dest) => {
-  const pos = TABLE_POSITIONS[dest];
-
-  // 표시용 target
-  setTarget(dest === 0 ? "Origin" : dest);
-
-  setStatus("Moving");
-  setLastCmd(`버튼: ${dest === 0 ? "Origin" : dest}로 이동`);
-
-  setRobotPos(pos);
-
-  setTimeout(() => {
-    setStatus("Idle");
-  }, 800);
-};
-
   const displayTarget = (value) => {
-  return value === 0 ? "Origin" : value;
-};
+    return value === 0 ? "Origin" : value;
+  };
 
+
+
+  const go = (dest) => {
+    const startId = target;     // 현재 위치 번호 (0~4)
+    const pathKeys = PATH_MAP[startId][dest];
+    if (!pathKeys) return;
+
+    setTarget(dest);
+    setStatus("Moving");
+    setLastCmd(`버튼: ${displayTarget(dest)}로 이동`);
+
+    // PATH_MAP에서 waypoint/목적지 좌표를 가져옴
+    const points = pathKeys.map(k =>
+      typeof k === "string" ? WAYPOINTS[k] : TABLE_POSITIONS[k]
+    );
+
+    let current = robotPos;
+
+    const moveNext = (i) => {
+      if (i >= points.length) {
+        setStatus("Idle");
+        return;
+      }
+
+      const nextPoint = points[i];
+
+      animateTo(current, nextPoint, 700, setRobotPos, () => {
+        current = nextPoint;
+        moveNext(i + 1);
+      });
+    };
+
+    moveNext(0);
+  };
 
 
   return (

@@ -3,18 +3,17 @@ import "./App.css";
 
 const TABLE_POSITIONS = {
   0: { x: 343, y: 150 },
-  1: { x: 750, y: 520 },
-  2: { x: 1350, y: 520 },
-  3: { x: 750, y: 910 },
-  4: { x: 1350, y: 910 },
+  1: { x: 745, y: 485 },
+  2: { x: 1335, y: 485 },
+  3: { x: 745, y: 870 },
+  4: { x: 1335, y: 870 },
 };
 
 const WAYPOINTS = {
-  T0: { x: 380,  y: 480 },
-  T1: { x: 450,  y: 520 },
-  T2: { x: 1050, y: 520 },
-  T3: { x: 450,  y: 910 },
-  T4: { x: 1050, y: 910 },
+  T1: { x: 548,  y: 485 },
+  T2: { x: 1040, y: 485 },
+  T3: { x: 548,  y: 870 },
+  T4: { x: 1040, y: 870 },
 };
 
 const PATH_MAP = {
@@ -22,7 +21,7 @@ const PATH_MAP = {
     0:[],
     1:["T1", 1],
     2:["T1", 1, "T2", 2],
-    3:["T0", "T3", 3],
+    3:["T3", 3],
     4:["T1", 1, "T2", "T4", 4]
   },
 
@@ -43,7 +42,7 @@ const PATH_MAP = {
   },
 
   3:{
-    0:["T3", "T0", 0],
+    0:["T3", 0],
     1:["T3", "T1", 1],
     2:["T4", "T2", 2],
     3:[],
@@ -95,20 +94,24 @@ function App() {
   const go = (dest) => {
     if (status === "Moving") return;
 
-    const startId = target;     // 현재 위치 번호 (0~4)
+    const startId = target;
     const pathKeys = PATH_MAP[startId][dest];
     if (!pathKeys) return;
 
     setTarget(dest);
     setStatus("Moving");
-    dest === 0 ? setLastCmd(`${displayTarget(dest)}로 이동`) :setLastCmd(`테이블 ${displayTarget(dest)}로 이동`);
+    dest === 0
+      ? setLastCmd(`${displayTarget(dest)}로 이동`)
+      : setLastCmd(`테이블 ${displayTarget(dest)}로 이동`);
 
-    // PATH_MAP에서 waypoint/목적지 좌표를 가져옴
     const points = pathKeys.map(k =>
       typeof k === "string" ? WAYPOINTS[k] : TABLE_POSITIONS[k]
     );
 
     let current = robotPos;
+
+    // ★ 속도(px / sec)
+    const SPEED = 100;
 
     const moveNext = (i) => {
       if (i >= points.length) {
@@ -118,7 +121,15 @@ function App() {
 
       const nextPoint = points[i];
 
-      animateTo(current, nextPoint, 700, setRobotPos, () => {
+      // ★ 현재 위치와 다음 위치 사이 거리 계산
+      const dx = nextPoint.x - current.x;
+      const dy = nextPoint.y - current.y;
+      const dist = Math.hypot(dx, dy);      // = sqrt(dx*dx + dy*dy)
+
+      // ★ 이 구간에서 걸릴 시간(ms)
+      const duration = (dist / SPEED) * 1000;
+
+      animateTo(current, nextPoint, duration, setRobotPos, () => {
         current = nextPoint;
         moveNext(i + 1);
       });
@@ -128,11 +139,13 @@ function App() {
   };
 
 
+
   return (
     <div className="map-container">
       {/* 상단 TopView 영역 */}
       <div className="topview">
         <div className="return">퇴식구</div>
+        <div className="serving">배식구</div>
         <div className="kitchen">주방 </div>
         <div className="counter">카운터</div>
 
@@ -146,10 +159,24 @@ function App() {
 
         {/* 테이블 2×2 */}
         <div className="tables">
-          <div className="table t1">1</div>
-          <div className="table t2">2</div>
-          <div className="table t3">3</div>
-          <div className="table t4">4</div>
+          {[1, 2, 3, 4].map((id) => (
+            <div className={`table-block table-${id}`} key={id}>
+              {/* 왼쪽 의자 2개 */}
+              <div className="seats-column seats-left">
+                <div className="seat" />
+                <div className="seat" />
+              </div>
+
+              {/* 테이블 본체 */}
+              <div className="table-rect">{id}</div>
+
+              {/* 오른쪽 의자 2개 */}
+              <div className="seats-column seats-right">
+                <div className="seat" />
+                <div className="seat" />
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* 왼쪽 아래 작은 패널 */}

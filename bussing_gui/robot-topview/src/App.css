@@ -23,7 +23,31 @@
   width: 10%;       
   height: 100px;  
 
-  background: #ffc4fa;
+  background: #D1F3C5;
+  border-radius: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 28px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+
+  z-index: 5;
+
+}
+
+.serving{
+  position: absolute;
+  top: 20px;
+  left: 31%;
+  transform: translateX(-50%);
+
+  width: 10%;       
+  height: 100px;  
+
+  background: #B8D7F8;
   border-radius: 20px;
 
   display: flex;
@@ -43,13 +67,13 @@
 .kitchen {
   position: absolute;
   top: 20px;
-  left: 60%;
+  left: 58.65%;
   transform: translateX(-50%);
 
-  width: 50%;       
+  width: 43%;       
   height: 100px;  
 
-  background: #ffe6c4;
+  background: #FFC0CB;
   border-radius: 20px;
 
   display: flex;
@@ -67,19 +91,19 @@
 .counter {
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 9%;
 
-  width: 100px;
+  width: 180px;
   height: 100px;
 
-  background: #c4e5ff;
+  background: #ffc4fa;
   border-radius: 12px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  font-size: 18px;
+  font-size: 28px;
   font-weight: 600;
 
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
@@ -88,30 +112,65 @@
 }
 
 /* 테이블 영역 (가운데~오른쪽 크게) */
+/* 테이블 영역 */
 .tables {
   position: absolute;
   top: 250px;
   left: 58%;
   transform: translateX(-50%);
+
   width: 55%;
   height: 60%;
+
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 160px;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  row-gap: 140px;
+  column-gap: 160px;
+  justify-items: center;
+  align-items: center;
 }
 
-/* 개별 테이블 */
-.table {
-  background: #a17878;
-  border-radius: 16px;
-  border: 2px solid #777;
+/* 테이블 + 의자 한 세트 */
+.table-block {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
-  font-weight: 600;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  gap: 20px;            /* 테이블과 의자 사이 간격 */
 }
+
+/* 테이블 직사각형 */
+.table-rect {
+  width: 120px;
+  height: 200px;        /* 세로로 길게 */
+  background: #cf9c9c;
+  /* border-radius: 16px; */
+  /* border: 2px solid #777; */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 좌우 의자 묶음 */
+.seats-column {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;            /* 의자 간 간격 */
+}
+
+/* 동그란 의자 */
+.seat {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f6b64a;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+}
+
 
 /* 로봇 점 (원형 + 부드러운 이동) */
 .robot-dot {
@@ -121,8 +180,8 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #4bff63;
-  border: 3px solid #ffffff;
+  background: #ffffff;
+  border: 10px solid #000000;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   /* transition: transform 1.5s ease; */
 
@@ -132,12 +191,12 @@
 /* 전체 오버레이 컨테이너 (패널들 묶는 영역) */
 .control-overlay {
   position: fixed;
-  bottom: 50px;
+  bottom: 20%;
   left: 50px;
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 100px;
 }
 
 /* 큰 숫자 보여주는 상단 패널 */

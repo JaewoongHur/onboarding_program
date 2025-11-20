@@ -227,14 +227,15 @@
 }
 
 .row button {
-  width: 80px;
-  height: 36px;
+  width: 100px;
+  height: 48px;
   background: rgba(255,255,255,0.2);
   color: white;
   border: 1px solid rgba(255,255,255,0.4);
   border-radius: 10px;
   backdrop-filter: blur(6px);
   cursor: pointer;
+  text-align: center;
 }
 
 .row button:hover,

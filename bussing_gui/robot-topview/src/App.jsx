@@ -87,19 +87,21 @@ function App() {
   const [lastCmd, setLastCmd] = useState("-");
 
   const displayTarget = (value) => {
-    return value === 0 ? "Origin" : value;
+    return value === 0 ? "퇴식구" : value;
   };
 
 
 
   const go = (dest) => {
+    if (status === "Moving") return;
+
     const startId = target;     // 현재 위치 번호 (0~4)
     const pathKeys = PATH_MAP[startId][dest];
     if (!pathKeys) return;
 
     setTarget(dest);
     setStatus("Moving");
-    setLastCmd(`버튼: ${displayTarget(dest)}로 이동`);
+    dest === 0 ? setLastCmd(`${displayTarget(dest)}로 이동`) :setLastCmd(`테이블 ${displayTarget(dest)}로 이동`);
 
     // PATH_MAP에서 waypoint/목적지 좌표를 가져옴
     const points = pathKeys.map(k =>
@@ -130,7 +132,7 @@ function App() {
     <div className="map-container">
       {/* 상단 TopView 영역 */}
       <div className="topview">
-        <div className="return">return</div>
+        <div className="return">퇴식구</div>
         <div className="kitchen">주방 </div>
         <div className="counter">카운터</div>
 
@@ -163,17 +165,17 @@ function App() {
           <div className="panel-buttons">
 
             <div className="row origin-row">
-              <button className="origin-btn" onClick={() => go(0)}>Origin</button>
+              <button className="origin-btn" disabled={status === "Moving"} onClick={() => go(0)}>퇴식구</button>
             </div>
 
             <div className="row row-12">
-              <button onClick={() => go(1)}>1</button>
-              <button onClick={() => go(2)}>2</button>
+              <button disabled={status === "Moving"} onClick={() => go(1)}>1</button>
+              <button disabled={status === "Moving"} onClick={() => go(2)}>2</button>
             </div>
 
             <div className="row row-34">
-              <button onClick={() => go(3)}>3</button>
-              <button onClick={() => go(4)}>4</button>
+              <button disabled={status === "Moving"} onClick={() => go(3)}>3</button>
+              <button disabled={status === "Moving"} onClick={() => go(4)}>4</button>
             </div>
         </div>
 
